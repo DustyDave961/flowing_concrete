@@ -3,7 +3,7 @@ for _, state in pairs({"flowing", "source"}) do
 	minetest.register_node("flowing_concrete:concrete_"..state, {
 		description = (state == "source" and "Concrete Source" or "Flowing Concrete"),
 		drawtype = (state == "source" and "liquid" or "flowingliquid"),
-		tiles = {"flowing_concrete_block.png"},
+		tiles = {"basic_materials_concrete_block.png"},
 		paramtype2 = (state == "flowing" and "flowingliquid" or nil),
 		walkable = false,
 		pointable = false,
@@ -30,8 +30,8 @@ bucket.register_liquid(
 	"flowing_concrete:concrete_source",
 	"flowing_concrete:concrete_flowing",
 	"flowing_concrete:bucket_concrete",
-	"flowing_concrete_bucket.png",
-	("Concrete Bucket"),
+	"animalia_milk_bucket.png",
+	"Concrete Bucket",
 	{tool = 1}
 )
 
@@ -41,7 +41,19 @@ if minetest.get_modpath("basic_materials") then
 	minetest.register_alias("flowing_concrete:wet_cement", "basic_materials:wet_cement")
 	if minetest.get_modpath("stairsplus_legacy") then
 		minetest.register_alias("flowing_concrete:slab_concrete", "basic_materials:slab_concrete_8")
+	else
+		stairs.register_slab(
+			"concrete",
+			"flowing_concrete:concrete_block",
+			{cracky = 1},
+			{"flowing_concrete_block.png"},
+			"Concrete Slab",
+			default.node_sound_stone_defaults(),
+			true
+		)
 	end
+	minetest.register_alias("flowing_concrete:slab_concrete", "stairs:slab_concrete")
+
 else
 	minetest.register_alias("basic_materials:concrete_block", "flowing_concrete:concrete_block")
 	minetest.register_alias("basic_materials:wet_cement", "flowing_concrete:wet_cement")
@@ -59,16 +71,6 @@ else
 		description = ("Wet Cement"),
 		inventory_image = "flowing_concrete_wet_cement.png",
 	})
-	
-	stairs.register_slab(
-		"concrete",
-		"flowing_concrete:concrete_block",
-		{cracky = 1},
-		{"flowing_concrete_block.png"},
-		"Concrete Slab",
-		default.node_sound_stone_defaults(),
-		true
-	)
 	
 	minetest.register_craft({
 		type = "shapeless",
@@ -107,9 +109,20 @@ minetest.register_abm({
 
 minetest.register_abm({
 	label = "Harden concrete",
+	nodenames = {"flowing_concrete:slab_concrete"},
+	neighbors = {"flowing_concrete:concrete_source"},
+	interval = 1,
+	chance = 1,
+	action = function(pos, node)
+		minetest.set_node(pos, {name = "flowing_concrete:concrete_block"})
+	end,
+})
+
+minetest.register_abm({
+	label = "Harden concrete",
 	nodenames = {"flowing_concrete:concrete_source"},
 	neighbors = {"flowing_concrete:concrete_block"},
-	interval = 10,
+	interval = 60,
 	chance = 1,
 	action = function(pos, node)
 		minetest.set_node(pos, {name = "flowing_concrete:concrete_block"})
