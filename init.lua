@@ -3,15 +3,35 @@ for _, state in pairs({"flowing", "source"}) do
 	minetest.register_node("flowing_concrete:concrete_"..state, {
 		description = (state == "source" and "Concrete Source" or "Flowing Concrete"),
 		drawtype = (state == "source" and "liquid" or "flowingliquid"),
-		tiles = {"flowing_concrete_block.png"},
+		tiles = {{
+			name = "flowing_concrete_block.png",
+			animation = {
+				type = "vertical_frames",
+				aspect_w = 16,
+				aspect_h = 16,
+				length = 3.0,
+			},
+		}},
 		special_tiles = {
 			{
 				name = "flowing_concrete_block.png",
 				backface_culling = false,
+				animation = {
+					type = "vertical_frames",
+					aspect_w = 16,
+					aspect_h = 16,
+					length = 3.0,
+				},
 			},
 			{
 				name = "flowing_concrete_block.png",
 				backface_culling = true,
+				animation = {
+					type = "vertical_frames",
+					aspect_w = 16,
+					aspect_h = 16,
+					length = 3.0,
+				},
 			},
 		},
 		paramtype2 = (state == "flowing" and "flowingliquid" or nil),
