@@ -45,14 +45,28 @@ bucket.register_liquid(
 	{tool = 1}
 )
 
---Register items and aliases so we don't need basic_materials.
+local function register_slab()	
+	stairs.register_slab(
+			"concrete",
+			"flowing_concrete:concrete_block",
+			{cracky = 1, dig_stone = 1, pickaxey = 5},
+			{"flowing_concrete_block.png"},
+			"Concrete Slab",
+			default.node_sound_stone_defaults(),
+			true
+	)
+end
+
+--Copy items so we don't need basic_materials.
 if minetest.get_modpath("basic_materials") then
 	minetest.register_alias("flowing_concrete:concrete_block", "basic_materials:concrete_block")
-	minetest.register_alias("flowing_concrete:wet_cement", "basic_materials:wet_cement")
-else
-	minetest.register_alias("basic_materials:concrete_block", "flowing_concrete:concrete_block")
-	minetest.register_alias("basic_materials:wet_cement", "flowing_concrete:wet_cement")
 	
+	if minetest.get_modpath("stairsplus_legacy") then
+		minetest.register_alias("flowing_concrete:slab_concrete", "basic_materials:slab_concrete_8")
+	else
+		register_slab()
+	end
+else
 	minetest.register_node("flowing_concrete:concrete_block", {
 		description = ("Concrete Block"),
 		tiles = {"flowing_concrete_block.png"},
@@ -66,6 +80,8 @@ else
 		description = ("Wet Cement"),
 		inventory_image = "flowing_concrete_wet_cement.png",
 	})
+	minetest.register_alias("basic_materials:concrete_block", "flowing_concrete:concrete_block")
+	minetest.register_alias("basic_materials:wet_cement", "flowing_concrete:wet_cement")
 	
 	minetest.register_craft({
 		type = "shapeless",
@@ -78,22 +94,11 @@ else
 			"group:water_bucket"
 		},
 		replacements = {{"group:water_bucket", "bucket:bucket_empty"}},
-	})
-	
-	stairs.register_slab(
-			"concrete",
-			"flowing_concrete:concrete_block",
-			{cracky = 1, dig_stone = 1, pickaxey = 5},
-			{"flowing_concrete_block.png"},
-			"Concrete Slab",
-			default.node_sound_stone_defaults(),
-			true
-		)
+	})	
+	register_slab()
 end
 
---Slab aliases
 minetest.register_alias("flowing_concrete:slab_concrete", "stairs:slab_concrete")
-minetest.register_alias("flowing_concrete:slab_concrete", "basic_materials:slab_concrete_8")
 
 --Concrete bucket recipe
 minetest.register_craft({
@@ -109,12 +114,22 @@ minetest.register_craft({
 local function harden_concrete(concrete)
 	local concrete = concrete
 	minetest.register_abm({
-		label = "Harden concrete",
+		label = "Harden: Flowing concrete",
 		nodenames = {"flowing_concrete:concrete_flowing"},
 		interval = 30,
 		chance = 1,
 		action = function(pos, node)
 			minetest.set_node(pos, {name = concrete})
+		end,
+	})	
+	minetest.register_abm({
+		label = "Harden: concrete Source",
+		nodenames = {"flowing_concrete:concrete_source"},
+		neighbors = {concrete},
+		interval = 40,
+		chance = 1,
+		action = function(pos, node)
+			minetest.set_node(pos, {name = "flowing_concrete:concrete_block"})
 		end,
 	})
 end
@@ -124,17 +139,6 @@ if minetest.settings:get_bool("flowing_concrete_slabs") then
 else
 	harden_concrete("flowing_concrete:concrete_block")
 end
-
-minetest.register_abm({
-	label = "Harden concrete",
-	nodenames = {"flowing_concrete:concrete_source"},
-	neighbors = {"flowing_concrete:concrete_block"},
-	interval = 40,
-	chance = 1,
-	action = function(pos, node)
-		minetest.set_node(pos, {name = "flowing_concrete:concrete_block"})
-	end,
-})
 
 --Register concrete bucket as dungeon loot
 if minetest.global_exists("dungeon_loot") then
