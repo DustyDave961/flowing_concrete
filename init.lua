@@ -34,6 +34,8 @@ for _, state in pairs({"flowing", "source"}) do
 				},
 			},
 		},
+		use_texture_alpha = "blend",
+		paramtype = "light",
 		paramtype2 = (state == "flowing" and "flowingliquid" or nil),
 		walkable = false,
 		pointable = false,
