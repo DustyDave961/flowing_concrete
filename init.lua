@@ -62,7 +62,7 @@ bucket.register_liquid(
 	"flowing_concrete:concrete_source",
 	"flowing_concrete:concrete_flowing",
 	"flowing_concrete:bucket_concrete",
-	"flowing_concrete_bucket.png",
+	"bucket.png^flowing_concrete_overlay.png",
 	"Concrete Bucket",
 	{tool = 1}
 )
