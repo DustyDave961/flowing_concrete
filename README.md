@@ -11,6 +11,3 @@ Flowing Concrete adds the following items:
 The following items are only added if Basic Materials isn't enabled:
 * Concrete Block
 * Wet Cement, for crafting Concrete Bucket.
-
-## Copyright
-flowing_concrete_block.png and flowing_concrete_wet_cement.png from [Basic Materials](https://github.com/mt-mods/basic_materials) by mt-mods, CC-BY-SA-4.0.
