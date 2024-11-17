@@ -3,10 +3,13 @@ Concrete that hardens over time. Cheap alternative to lava cooling. Flowing conc
 
 ## Items
 Flowing Concrete adds the following items:
-* Concrete Bucket, for placing Concrete Source.
 * Concrete Source: liquid concrete
+* Concrete Bucket, for placing Concrete Source.
 * Flowing Concrete: wet concrete that flows outward from Concrete Source.
+* Concrete Stair
 * Concrete Slab: half block of concrete, which flowing concrete turns into if enabled.
+* Inner Concrete Stair
+* Outer Concrete Stair
 ### Basic Materials
 The following items are only added if Basic Materials isn't enabled:
 * Concrete Block
