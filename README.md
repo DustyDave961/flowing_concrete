@@ -1,5 +1,5 @@
 # Flowing Concrete
-Concrete that hardens over time. Cheap alternative to lava cooling. Flowing concrete become full blocks by default, or slabs if enabled.
+Concrete stairs and liquid concrete that hardens over time. Cheap alternative to lava cooling. Flowing concrete become full blocks by default, or slabs if enabled.
 
 ## Items
 Flowing Concrete adds the following items:
