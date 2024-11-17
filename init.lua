@@ -62,20 +62,23 @@ bucket.register_liquid(
 	"flowing_concrete:concrete_source",
 	"flowing_concrete:concrete_flowing",
 	"flowing_concrete:bucket_concrete",
-	"bucket.png^flowing_concrete_overlay.png",
+	"flowing_concrete_bucket.png",
 	"Concrete Bucket",
 	{tool = 1}
 )
 
-local function register_slab()	
-	stairs.register_slab(
-			"concrete",
-			"flowing_concrete:concrete_block",
-			{cracky = 1, dig_stone = 1, pickaxey = 5},
-			{"flowing_concrete_block.png"},
-			"Concrete Slab",
-			default.node_sound_stone_defaults(),
-			true
+local function concrete_stairs()
+	stairs.register_stair_and_slab(
+		"concrete",
+		"flowing_concrete:concrete_block",
+		{cracky = 1, dig_stone = 1, pickaxey = 5},
+		{"flowing_concrete_block.png"},
+		"Concrete Stair",
+		"Concrete Slab",
+		default.node_sound_stone_defaults(),
+		true,
+		"Inner Concrete Stair",
+		"Outer Concrete Stair"
 	)
 end
 
@@ -86,7 +89,7 @@ if minetest.get_modpath("basic_materials") then
 	if minetest.get_modpath("stairsplus_legacy") then
 		minetest.register_alias("flowing_concrete:slab_concrete", "basic_materials:slab_concrete_8")
 	else
-		register_slab()
+		concrete_stairs()
 	end
 else
 	minetest.register_node("flowing_concrete:concrete_block", {
@@ -117,7 +120,7 @@ else
 		},
 		replacements = {{"group:water_bucket", "bucket:bucket_empty"}},
 	})	
-	register_slab()
+	concrete_stairs()
 end
 
 minetest.register_alias("flowing_concrete:slab_concrete", "stairs:slab_concrete")
