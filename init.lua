@@ -57,16 +57,6 @@ for _, state in pairs({"flowing", "source"}) do
 	})
 end
 
---Register bucket of concrete
-bucket.register_liquid(
-	"flowing_concrete:concrete_source",
-	"flowing_concrete:concrete_flowing",
-	"flowing_concrete:bucket_concrete",
-	"flowing_concrete_bucket.png",
-	"Concrete Bucket",
-	{tool = 1}
-)
-
 local function concrete_stairs()
 	stairs.register_stair_and_slab(
 		"concrete",
@@ -91,6 +81,7 @@ if minetest.get_modpath("basic_materials") then
 	else
 		concrete_stairs()
 	end
+	minetest.register_alias("flowing_concrete:wet_cement", "basic_materials:wet_cement")
 else
 	minetest.register_node("flowing_concrete:concrete_block", {
 		description = ("Concrete Block"),
@@ -123,17 +114,26 @@ else
 	concrete_stairs()
 end
 
-minetest.register_alias("flowing_concrete:slab_concrete", "stairs:slab_concrete")
-
---Concrete bucket recipe
+--Bucket of concrete
 minetest.register_craft({
 	output = "flowing_concrete:bucket_concrete",
 	recipe = {
 		{"group:sand", "flowing_concrete:wet_cement", "default:gravel"},
-		{"default:steel_ingot", "bucket:bucket_empty", "flowing_concrete:wet_cement"},
+		{"default:steel_ingot", "flowing_concrete:wet_cement" ,"bucket:bucket_empty"},
 		{"default:gravel", "flowing_concrete:wet_cement", "group:sand"},
-	}
+	},
 })
+
+bucket.register_liquid(
+	"flowing_concrete:concrete_source",
+	"flowing_concrete:concrete_flowing",
+	"flowing_concrete:bucket_concrete",
+	"#c4bdb5",
+	"Concrete Bucket",
+	{tool = 1}
+)
+
+minetest.register_alias("flowing_concrete:slab_concrete", "stairs:slab_concrete")
 
 --Solidify the concrete over time.
 local function harden_concrete(concrete)
