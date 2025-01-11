@@ -180,6 +180,7 @@ end
 
 if minetest.get_modpath("liquid_physics") then
 	liquid_physics.register_liquid("flowing_concrete", "concrete_source", "concrete_flowing")
+	liquid_physics.register_bucket("flowing_concrete:bucket_concrete")
 end
 
 if minetest.settings:get_bool("flowing_concrete_slabs") then
