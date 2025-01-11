@@ -138,9 +138,28 @@ minetest.register_alias("flowing_concrete:slab_concrete", "stairs:slab_concrete"
 --Solidify the concrete over time.
 local function harden_concrete(concrete)
 	local concrete = concrete
+	
+	local nodenames_slab = {"flowing_concrete:concrete_flowing"}
+	local nodenames_block = {"flowing_concrete:concrete_source"}
+	
+	if minetest.get_modpath("liquid_physics") then
+		nodenames_slab = {}
+		nodenames_block = {}
+		local id_concrete_liquid = liquid_physics.get_liquid_id("flowing_concrete:concrete_source")
+		local node_names = liquid_physics.get_liquid_node_names(id_concrete_liquid)
+		-- Up to half height
+		for i = 1, 4 do
+			table.insert(nodenames_slab, node_names[i])
+		end
+		-- Half height up to full height
+		for i = 5, 8 do
+			table.insert(nodenames_block, node_names[i])
+		end
+	end
+	
 	minetest.register_abm({
 		label = "Harden: Flowing concrete",
-		nodenames = {"flowing_concrete:concrete_flowing"},
+		nodenames = nodenames_slab,
 		interval = 30,
 		chance = 1,
 		action = function(pos, node)
@@ -149,7 +168,7 @@ local function harden_concrete(concrete)
 	})	
 	minetest.register_abm({
 		label = "Harden: concrete Source",
-		nodenames = {"flowing_concrete:concrete_source"},
+		nodenames = nodenames_block,
 		neighbors = {concrete},
 		interval = 40,
 		chance = 1,
@@ -157,6 +176,11 @@ local function harden_concrete(concrete)
 			minetest.set_node(pos, {name = "flowing_concrete:concrete_block"})
 		end,
 	})
+end
+
+if minetest.get_modpath("liquid_physics") then
+	liquid_physics.register_liquid("flowing_concrete", "concrete_source", "concrete_flowing")
+	liquid_physics.register_bucket("flowing_concrete:bucket_concrete")
 end
 
 if minetest.settings:get_bool("flowing_concrete_slabs") then
